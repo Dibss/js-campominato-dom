@@ -15,37 +15,18 @@ con difficoltà 3 => tra 1 e 49
 Le bombe dovranno essere generate nello stesso range delle caselle di gioco.*/
 
 let grid = document.getElementById("grid");
-
-
-// DA CONTROLLARE
-function box(cells) {
-  let arr = []
-  for (let i = 0; i < cells; i++){
-    arr.push(i);
-  }
-  for(let i = arr.length - 1; i > 0; i++){
-    const numArr = Math.floor(Math.random() * (i + 1));
-    arr[i] = arr[numArr];
-    arr[numArr] = arr[i];
-  }
-  for (i = 1; i <= cells; i++){
-    let box = document.createElement("div");
-    box.classList.add("box");
-    box.innerHTML = arr[i - 1];
-    grid.appendChild(box);
-    box.addEventListener("click",
-      function (){
-        this.classList.add("clicked");
-      }
-    )
-  }
-}
+let paragraph = document.getElementById("welcome")
 
 play.addEventListener("click",
   function play(){
-    let choice = document.getElementById("choice").options[document.getElementById("choice").selectedIndex].text;
+    // ------------------------------------------------------------
+    grid.innerHTML = '';
 
-    let cells = 0;
+    let choice = document.getElementById("choice").options[document.getElementById("choice").selectedIndex].text;
+    let cells;
+
+    grid.classList.remove("d-none");
+    paragraph.classList.add("d-none");
   
     if(choice == "Easy"){
       cells = 100
@@ -57,10 +38,52 @@ play.addEventListener("click",
       cells = 49;
       document.documentElement.style.setProperty('--column', '7');
     }
+    // --------------------------------------------------------------
 
-    grid.innerHTML = '';
+    let arrBombs = []
+    let sixteenBombs = []
 
+    // generare le bombe
+    for(let k = 0; k < cells; k++){
+      arrBombs.push(k + 1);
+    }
+    arrBombs = shuffle(arrBombs);
+    for(bombs = 0; bombs < 16; bombs++){
+      sixteenBombs.push(arrBombs[bombs]);
+    }
+
+    // DA NON CANCELLARE ---------------------------
+    function box(cells) {
+      for (i = 1; i <= cells; i++){
+        let box = document.createElement("div");
+        box.classList.add("box");
+        box.innerHTML = arr[i - 1];
+        grid.appendChild(box);
+        box.addEventListener("click",
+          function gameOver() {
+            if (sixteenBombs.includes(parseInt(this.innerText))) {
+              this.classList.add('bomb');
+              box.innerHTML = `<i class="fa-solid fa-bomb"></i>`;
+              this.removeEventListener("click", gameOver);
+            } else {
+              this.classList.add('clicked');
+            }
+          }
+        )
+      }
+    }
+
+    let arr = []
+    // per i numeri casuali
+    for(let y = 1; y < cells + 1; y++){
+      arr.push(y);
+    }
+    function shuffle(arr){
+      return arr.sort( () => Math.random() - 0.5)
+    }
+    arr = shuffle(arr);
     box(cells);
+    // -----------------------------------------------------
   }
 );
 

@@ -41,4 +41,8 @@ button{width: 80px;}
   cursor: pointer;
 }
 
+.d-none{display: none;}
 .clicked{background-color: var(--clicked); color: var(--white);}
+.unclicked{background-color: unset; color: unset;}
+
+.bomb{background-color: red;}
