@@ -46,3 +46,4 @@ button{width: 80px;}
 .unclicked{background-color: unset; color: unset;}
 
 .bomb{background-color: red;}
+#game_over{margin-right: 1em; font-weight: bold; font-size: 1.2rem;}
