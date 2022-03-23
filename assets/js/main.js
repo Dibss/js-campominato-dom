@@ -9,6 +9,7 @@ play.addEventListener("click",
 
     let choice = document.getElementById("choice").options[document.getElementById("choice").selectedIndex].text;
     let cells;
+    let score = 0;
 
     grid.classList.remove("d-none");
     paragraph.classList.add("d-none");
@@ -39,6 +40,7 @@ play.addEventListener("click",
     }
 
     // DA NON CANCELLARE ---------------------------
+
     function box(cells) {
       for (i = 1; i <= cells; i++){
         let box = document.createElement("div");
@@ -48,17 +50,30 @@ play.addEventListener("click",
         box.addEventListener("click",
           function gameOver() {
             if (sixteenBombs.includes(parseInt(this.innerText))) {
-              for(let i = 0; i < sixteenBombs.length; i++){
-                game_over.classList.remove("d-none");
-                this.classList.add('bomb');
-                box.innerHTML = `<i class="fa-solid fa-bomb"></i>`;
-                this.removeEventListener("click", gameOver);
-              }
+              endGame(cells, box);
+              box.classList.add("bomb");
+              game_over.classList.remove("d-none");
+              box.innerHTML = `<i class="fa-solid fa-bomb"></i>`;
+              this.removeEventListener("click", gameOver);
             } else {
               this.classList.add('clicked');
+              score += 1;
+              document.getElementById("score").innerHTML = score;
+              this.removeEventListener("click", gameOver());
             }
           }
         )
+      }
+    }
+
+    function endGame(cells, box){
+      for(let i = 0; i < cells + 1; i++){
+        let check = grid.children[i];
+        if(sixteenBombs.includes(parseInt(check.innerHTML))){
+          check.classList.add("bomb");
+          game_over.classList.remove("d-none");
+          box.innerHTML = `<i class="fa-solid fa-bomb"></i>`;
+        }
       }
     }
 
