@@ -3,7 +3,7 @@ let paragraph = document.getElementById("welcome")
 game_over.classList.add("d-none");
 
 play.addEventListener("click",
-  function play(){
+  function (){
     // ------------------------------------------------------------
     grid.innerHTML = '';
 
@@ -47,35 +47,34 @@ play.addEventListener("click",
         box.classList.add("box");
         box.innerHTML = arr[i - 1];
         grid.appendChild(box);
-        box.addEventListener("click",
-          function gameOver() {
-            if (sixteenBombs.includes(parseInt(this.innerText))) {
-              endGame(cells, box);
-              box.classList.add("bomb");
-              game_over.classList.remove("d-none");
-              box.innerHTML = `<i class="fa-solid fa-bomb"></i>`;
-              this.removeEventListener("click", gameOver);
-            } else {
-              this.classList.add('clicked');
-              score += 1;
-              document.getElementById("score").innerHTML = score;
-              this.removeEventListener("click", gameOver());
-            }
-          }
-        )
-      }
-    }
-
-    function endGame(cells, box){
-      for(let i = 0; i < cells + 1; i++){
-        let check = grid.children[i];
-        if(sixteenBombs.includes(parseInt(check.innerHTML))){
-          check.classList.add("bomb");
-          game_over.classList.remove("d-none");
-          box.innerHTML = `<i class="fa-solid fa-bomb"></i>`;
+        box.addEventListener("click", gameOver)
         }
       }
-    }
+
+      function gameOver() {
+        if (sixteenBombs.includes(parseInt(this.innerText))) {
+          endGame(cells, box);
+          box.classList.add("bomb");
+          game_over.classList.remove("d-none");
+        } else {
+          this.classList.add('clicked');
+          score += 1;
+          document.getElementById("score").innerHTML = score;
+          this.removeEventListener("click", gameOver);
+        }
+      }
+      
+      function endGame(cells){
+        game_over.classList.remove("d-none");
+        for(let i = 0; i < cells + 1; i++){
+          let check = grid.children[i];
+          check.removeEventListener("click", gameOver);
+          if(sixteenBombs.includes(parseInt(check.innerHTML))){
+            check.classList.add("bomb");
+            check.innerHTML = `<i class="fa-solid fa-bomb"></i>`;
+          }
+          }
+      }
 
     let arr = []
     // per i numeri casuali
